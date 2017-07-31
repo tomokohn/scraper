@@ -11,15 +11,15 @@ var app = express();
 // app.listen('8082');
 // console.log('listening on 8082');
 
-var url = 'http://www.toysrus.com/family/index.jsp?categoryId=13131514&ppg=96';
+var url = 'https://www.toysrus.com/family?categoryid=13131514';
 
 const xray = Xray().delay(5000);
-    xray(url, '.prodloop_cont',[
+    xray(url, '.product-item',[
         {
-            title: '.prodtitle',
-            price: '.ourPrice2',
-            url:'.prodtitle@href',
-            image: 'img.swatchProdImg@src'
+            title: '.product-item__product-title',
+            price: '.product-price__label__sale',
+            url:'.product-item@href',
+            image: '.product-item__product-image-alt__item img@src'
         }
     ]).write('result.json');
 

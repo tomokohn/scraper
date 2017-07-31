@@ -6,8 +6,9 @@
   "author": "Scotch",
   "dependencies": {
     "casperjs": "^1.1.4",
-    "cheerio": "latest",
+    "cheerio": "^1.0.0-rc.2",
     "express": "latest",
+    "node-horseman": "^3.3.0",
     "phantomjs": "^2.1.7",
     "phantomjs-prebuilt": "^2.1.14",
     "request": "^2.81.0",
