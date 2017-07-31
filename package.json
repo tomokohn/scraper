@@ -10,8 +10,9 @@
     "express": "latest",
     "phantomjs": "^2.1.7",
     "phantomjs-prebuilt": "^2.1.14",
-    "request": "latest",
-    "spooky": "^0.2.5"
+    "request": "^2.81.0",
+    "spooky": "^0.2.5",
+    "x-ray": "^2.3.2"
   },
   "devDependencies": {
     "connect-livereload": "^0.6.0"
