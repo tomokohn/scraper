@@ -47,6 +47,7 @@ function scrapeTerm(trem) {
             .html('.sx-price-fractional')
             .then(function (result) {
                 price = price +"." + result;
+                console.log('price:', price);
             })
             .attribute('.s-access-image', 'src')
             .then(function (result) {
@@ -75,7 +76,7 @@ function scrapeTerm(trem) {
     })
 }
 
-app.listen('8081');
-console.log('Magic happens on port 8081');
+app.listen('8082');
+console.log('Magic happens on port 8082');
 
 exports = module.exports = app;
