@@ -5,6 +5,7 @@ var Xray = require('x-ray');
 var request = require('request');
 var fs = require('fs');
 var express = require('express');
+var Horseman = require('node-horseman');
 
 var app = express();
 var app = require('express')();
@@ -65,15 +66,75 @@ function scrapeWalmart(url) {
 
 }
 
-// const xray = Xray().delay(3000, 5000).driver(driver);
-// xray(tempUrl, '.search-result-listview-item', [
-//     {
-//         title: '.prod-ProductTitle div',
-//         price: 'span.Price-group@aria-label',
-//         url: 'a.product-title-link@href',
-//         image: 'img.Tile-img@src'
-//     }
-// ]).write('walmart-result.json')
+app.post('/amazon/', function (req, res) {
+    var content = req.body
+    var arr = [];
+    for (var i=0; i< content.length; i++){
+        arr.push(content[i]);
+    }
+    var actions = arr.map(scrapeTerm);
+    var results = Promise.all(actions);
+    results.catch(function(err) {
+        // log that I have an error, return the entire array;
+        console.log('A promise failed to resolve', err);
+        return actions;
+    }).then(function (data) {
+        res.status(200).send(data);
+    })
+
+});
+
+function scrapeTerm(trem) {
+    return new Promise(function (resolve) {
+        var serachTerm = trem.replace(/ /g,'+');
+        console.log('serachTerm: ', serachTerm);
+        var price;
+        var image;
+        var title;
+        var link;
+        var asin;
+        var horseman = new Horseman();
+        horseman
+            .viewport(1280, 1024)
+            .userAgent('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0')
+            .open('http://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=' + serachTerm)
+            .wait(3000)
+            .waitForSelector('.s-item-container')
+            .html('.sx-price-whole')
+            .then(function (result) {
+                price = result;
+            })
+            .html('.sx-price-fractional')
+            .then(function (result) {
+                price = price +"." + result;
+                console.log('price:', price);
+            })
+            .attribute('.s-access-image', 'src')
+            .then(function (result) {
+                image = result
+            })
+            .attribute('.s-access-detail-page', 'href')
+            .then(function (result) {
+                link = result;
+                var index = link.indexOf('/dp/') + 4;
+
+                asin = link.substr(index,10);
+                console.log(index,", ",asin);
+            })
+            .html('h2.s-access-title')
+            .then(function (result) {
+                title = result;
+                resolve({
+                    title: title,
+                    price: price,
+                    image: image,
+                    link: link,
+                    asin: asin
+                });
+            })
+            .close();
+    })
+}
 
 
 
