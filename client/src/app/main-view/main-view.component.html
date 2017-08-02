@@ -1,0 +1,39 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6">
+      <app-search (searchResult)="workOnResult($event)"></app-search>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="title">merged lists</div>
+      <p-dataTable [value]="scraperData" *ngIf="scraperData" >
+        <p-column field="isGood" header="is good deal" [sortable]="true"></p-column>
+        <p-column field="title" header="title walmat"></p-column>
+        <p-column field="titleAmazon" header="title amazon"></p-column>
+        <p-column field="price" header="price walmat"></p-column>
+        <p-column field="priceAmazon" header="price amazon"></p-column>
+        <p-column field="url" header="url walmart">
+          <ng-template let-col let-url="rowData" pTemplate="body">
+            <a href="{{url[col.field]}}" target="_blank">{{url[col.field]}}</a>
+          </ng-template>
+        </p-column>
+        <p-column field="urlAmazon" header="url amazon">
+          <ng-template let-col let-url="rowData" pTemplate="body">
+            <a href="{{url[col.field]}}" target="_blank">{{url[col.field]}}</a>
+          </ng-template>
+        </p-column>
+        <p-column field="image" header="image walmart">
+          <ng-template let-col let-img="rowData" pTemplate="body">
+            <img src="{{img[col.field]}}">
+          </ng-template>
+        </p-column>
+        <p-column field="imgAmazon" header="image amazon">
+          <ng-template let-col let-img="rowData" pTemplate="body">
+            <img src="{{img[col.field]}}">
+          </ng-template>
+        </p-column>
+      </p-dataTable>
+    </div>
+  </div>
+</div>

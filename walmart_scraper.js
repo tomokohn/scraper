@@ -24,7 +24,7 @@ app.use(function(req, res, next) {
 app.listen('8081');
 console.log('listening on 8081');
 
-const makeDriver = require('request-x-ray')
+const makeDriver = require('request-x-ray');
 
 const options = {
     method: "GET", 						//Set HTTP method
@@ -34,7 +34,7 @@ const options = {
     }
 }
 
-const driver = makeDriver(options)		//Create driver
+const driver = makeDriver(options);		//Create driver
 
 tempUrl = 'https://www.walmart.com/browse/0?cat_id=0&facet=special_offers%3AClearance%7C%7Cpickup_and_delivery%3AShip+to+Home&grid=false&max_price=30&page=2#searchProductResult';
 
@@ -56,7 +56,7 @@ function scrapeWalmart(url) {
                 title: '.prod-ProductTitle div',
                 price: 'span.Price-group@aria-label',
                 url: 'a.product-title-link@href',
-                image: 'img.Tile-img@src'
+                image: '.Tile-img@src'
             }
         ])(function (err,obj) {
             console.log("obj: ",obj)
@@ -67,12 +67,13 @@ function scrapeWalmart(url) {
 }
 
 app.post('/amazon/', function (req, res) {
-    var content = req.body
+    var content = req.body;
+    console.log("content:",content);
     var arr = [];
     for (var i=0; i< content.length; i++){
         arr.push(content[i]);
     }
-    var actions = arr.map(scrapeTerm);
+    var actions = arr.map(scrapeAmazon);
     var results = Promise.all(actions);
     results.catch(function(err) {
         // log that I have an error, return the entire array;
@@ -134,6 +135,26 @@ function scrapeTerm(trem) {
             })
             .close();
     })
+}
+
+function scrapeAmazon(term) {
+    var serachTerm = term.replace(/ /g,'+');
+    console.log('serachTerm: ', serachTerm);
+    var amazonUrl = 'http://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=' + serachTerm;
+    return new Promise(function (resolve) {
+        const xray = Xray().delay(3000, 5000).driver(driver);
+        xray(amazonUrl, '.s-item-container',
+            {
+                title: '.s-access-title',
+                price: '.sx-zero-spacing@aria-label',
+                url: '.s-access-detail-page@href',
+                image: '.s-access-image@src'
+            }
+    )(function (err,obj) {
+            console.log("obj: ",obj);
+            resolve(obj);
+        });
+    });
 }
 
 

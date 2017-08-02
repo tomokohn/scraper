@@ -1,0 +1,7 @@
+<form [formGroup]="urlForm" (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="url">Enter Name:</label>
+    <input type="text" class="form-control" id="url" formControlName="url">
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>

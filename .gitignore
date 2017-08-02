@@ -43,3 +43,7 @@ Thumbs.db
 
 
 /scraper-client/node_modules
+/node_modules/
+/server/node_modules/
+/firebase/functions/node_modules/
+/client/node_modules/
