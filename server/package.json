@@ -2,6 +2,7 @@
   "name": "scraper",
   "description": "scraper anf find amazon price",
   "dependencies": {
+    "amazon-product-api": "^0.4.4",
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "multer": "^1.3.0",

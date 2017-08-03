@@ -26,11 +26,15 @@ export class MainViewComponent implements OnInit {
 
   margeLists(oldData,newData){
     for(let i=0;i<oldData.length;i++){
-      oldData[i]['titleAmazon'] = newData[i].title;
-      oldData[i]['urlAmazon'] = newData[i].url;
-      oldData[i]['imgAmazon'] = newData[i].image;
-      oldData[i]['priceAmazon'] = newData[i].price;
-      oldData[i]['isGood'] = this.parseAndCompare(oldData[i].price,oldData[i].priceAmazon);
+      if (newData[i][0].hasOwnProperty('ASIN')){
+        oldData[i]['asin'] = newData[i][0].ASIN[0];
+        oldData[i]['priceAmazon'] = newData[i][0].OfferSummary[0].LowestNewPrice[0].FormattedPrice[0];
+        oldData[i]['isGood'] = this.parseAndCompare(oldData[i].price,oldData[i].priceAmazon);
+      } else{
+        oldData[i]['asin'] = '';
+        oldData[i]['priceAmazon'] = '';
+        oldData[i]['isGood'] = '';
+      }
     }
     console.log("marged list", oldData);
   }

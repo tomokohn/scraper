@@ -10,7 +10,7 @@
       <p-dataTable [value]="scraperData" *ngIf="scraperData" >
         <p-column field="isGood" header="is good deal" [sortable]="true"></p-column>
         <p-column field="title" header="title walmat"></p-column>
-        <p-column field="titleAmazon" header="title amazon"></p-column>
+        <p-column field="asin" header="ASIN amazon"></p-column>
         <p-column field="price" header="price walmat"></p-column>
         <p-column field="priceAmazon" header="price amazon"></p-column>
         <p-column field="url" header="url walmart">
@@ -18,17 +18,12 @@
             <a href="{{url[col.field]}}" target="_blank">{{url[col.field]}}</a>
           </ng-template>
         </p-column>
-        <p-column field="urlAmazon" header="url amazon">
+        <p-column field="asin" header="ASIN">
           <ng-template let-col let-url="rowData" pTemplate="body">
-            <a href="{{url[col.field]}}" target="_blank">{{url[col.field]}}</a>
+            <a href="{{'https://www.amazon.com/dp/' + url[col.field]}}" target="_blank">{{url[col.field]}}</a>
           </ng-template>
         </p-column>
         <p-column field="image" header="image walmart">
-          <ng-template let-col let-img="rowData" pTemplate="body">
-            <img src="{{img[col.field]}}">
-          </ng-template>
-        </p-column>
-        <p-column field="imgAmazon" header="image amazon">
           <ng-template let-col let-img="rowData" pTemplate="body">
             <img src="{{img[col.field]}}">
           </ng-template>

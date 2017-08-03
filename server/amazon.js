@@ -1,6 +1,14 @@
 var Xray = require('x-ray');
 var request = require('request');
 
+var amazon = require('amazon-product-api');
+
+var client = amazon.createClient({
+    awsId: "AKIAJG3D5XAHMMG3KYMQ",
+    awsSecret: "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",
+    awsTag: "aws Tag"
+});
+
 
 const makeDriver = require('request-x-ray');
 
@@ -23,7 +31,7 @@ var search = function amazon(data){
         for (var i = 0; i < content.length; i++) {
             arr.push(content[i]);
         }
-        var actions = arr.map(scrapeAmazon);
+        var actions = arr.map(amazonApi);
         var results = Promise.all(actions);
         return results.then(function (data) {
             resolve(data);
@@ -32,23 +40,24 @@ var search = function amazon(data){
 
 };
 
-function scrapeAmazon(term) {
-    var serachTerm = term.replace(/ /g,'+');
-    console.log('serachTerm: ', serachTerm);
-    var amazonUrl = 'http://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=' + serachTerm;
+function amazonApi(term) {
     return new Promise(function (resolve) {
-        const xray = Xray().delay(3000, 5000).driver(driver);
-        xray(amazonUrl, '.s-item-container',
-            {
-                title: '.s-access-title',
-                price: '.sx-zero-spacing@aria-label',
-                url: '.s-access-detail-page@href',
-                image: '.s-access-image@src'
-            }
-    )(function (err,obj) {
-            console.log("obj: ",obj);
-            resolve(obj);
+        client.itemSearch({
+            Keywords: term,
+            ResponseGroup: 'ItemIds'
+        }).then(function(results){
+            resolve(results[0].ASIN[0]);
+            //console.log("amazon api results: ",results);
+        }).catch(function(err){
+            console.log("\n \n amazon api error: ",JSON.stringify(err));
+            resolve('');
         });
+    //     const xray = Xray().delay(3000, 5000).driver(driver);
+    //     xray(amazonUrl, '#result_0@data-asin'
+    // )(function (err,obj) {
+    //         console.log("obj: ",obj);
+    //         resolve(obj);
+    //     });
     });
 }
 

@@ -1,6 +1,8 @@
 var express = require('express');
 var walmart = require('./walmart_scraper');
 var search = require('./amazon');
+var products = require('./amazonSingleProduct');
+
 
 var app = express();
 
@@ -17,6 +19,7 @@ app.use(function(req, res, next) {
     next();
 });
 
+
 app.post('/walmart',function(req,res){
     walmart(req.body.url).then(function (result) {
         console.log('-------     done walmart scrape ------');
@@ -27,7 +30,12 @@ app.post('/walmart',function(req,res){
 app.post('/amazon',function(req,res){
     console.log(req.body);
     search(req.body).then(function (result) {
-        res.status(200).send(result)
+        console.log("\n \n amazon ASIN's: ",result);
+        products(result).then(function (prodList) {
+            console.log("\n \n amazon Prodducts result: ",prodList);
+            res.status(200).send(prodList) ;
+        })
+
     });
 });
 
