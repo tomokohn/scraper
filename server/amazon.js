@@ -3,10 +3,11 @@ var request = require('request');
 var Promise = require("bluebird");
 var amazon = require('amazon-product-api');
 var keys = require('./keys');
+var _ = require('lodash')
 
 var client = amazon.createClient({
-    awsId: keys.awsId,
-    awsSecret: keys.awsSecret,
+    awsId: "AKIAJG3D5XAHMMG3KYMQ",
+    awsSecret: "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",
     awsTag: "aws Tag"
 });
 
