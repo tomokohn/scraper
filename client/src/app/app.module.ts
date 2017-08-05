@@ -12,12 +12,14 @@ import { SearchService } from'./search/search.service'
 
 //PrimeNG
 import {DataTableModule,SharedModule} from 'primeng/primeng';
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SearchComponent,
-    MainViewComponent
+    MainViewComponent,
+    LoaderComponent
 
   ],
   imports: [

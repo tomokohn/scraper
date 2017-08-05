@@ -27,12 +27,22 @@ export class SearchService {
       .catch((e:Response | any)=> { return this.http.handleError(e)});
   }
 
-  srearchAmzon(data){
+  srearchAmzonAsin(data){
     let titles = [];
     for (let i=0; i<data.length; i++){
       titles.push(data[i].title);
     }
     return this.http.post(this.severUrl +'/amazon/',titles)
+      .map((res:Response)=>{
+        console.log("res amazon: ",res.json());
+        return res.json()
+
+      })
+      .catch((e:Response | any)=> { return this.http.handleError(e)});
+  }
+
+  srearchAmzonProducts(data){
+    return this.http.post(this.severUrl +'/products/',data)
       .map((res:Response)=>{
         console.log("res amazon: ",res.json());
         return res.json()

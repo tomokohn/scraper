@@ -35,7 +35,7 @@ var walmart = function scrapeWalmart(url) {
                 image: '.Tile-img@src'
             }
         ])(function (err,obj) {
-            console.log("obj: ",obj);
+            //console.log("obj: ",obj);
             resolve(obj);
         });
     })

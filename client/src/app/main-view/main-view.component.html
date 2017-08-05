@@ -1,24 +1,26 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-6">
-      <app-search (searchResult)="workOnResult($event)"></app-search>
+      <app-search (searchResult)="getAmazonAsins($event)"></app-search>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="showTable">
     <div class="col-md-12">
       <div class="title">merged lists</div>
       <p-dataTable [value]="scraperData" *ngIf="scraperData" >
         <p-column field="isGood" header="is good deal" [sortable]="true"></p-column>
         <p-column field="title" header="title walmat"></p-column>
+        <p-column field="title" header="title amazon"></p-column>
         <p-column field="asin" header="ASIN amazon"></p-column>
         <p-column field="price" header="price walmat"></p-column>
         <p-column field="priceAmazon" header="price amazon"></p-column>
+        <p-column field="salesRank" header="sales rank"></p-column>
         <p-column field="url" header="url walmart">
           <ng-template let-col let-url="rowData" pTemplate="body">
             <a href="{{url[col.field]}}" target="_blank">{{url[col.field]}}</a>
           </ng-template>
         </p-column>
-        <p-column field="asin" header="ASIN">
+        <p-column field="asin" header="link to amazon">
           <ng-template let-col let-url="rowData" pTemplate="body">
             <a href="{{'https://www.amazon.com/dp/' + url[col.field]}}" target="_blank">{{url[col.field]}}</a>
           </ng-template>
@@ -31,4 +33,5 @@
       </p-dataTable>
     </div>
   </div>
+  <app-loader *ngIf="!showTable"></app-loader>
 </div>

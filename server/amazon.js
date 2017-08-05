@@ -1,6 +1,6 @@
 var Xray = require('x-ray');
 var request = require('request');
-
+var Promise = require("bluebird");
 var amazon = require('amazon-product-api');
 
 var client = amazon.createClient({
@@ -24,24 +24,26 @@ const driver = makeDriver(options);		//Create driver
 
 
 var search = function amazon(data){
-    return new Promise(function (resolve) {
+    return new Promise(function (resolve,reject) {
         var content = data;
         console.log("content:", content);
         var arr = [];
         for (var i = 0; i < content.length; i++) {
             arr.push(content[i]);
         }
-        var actions = arr.map(amazonApi);
-        var results = Promise.all(actions);
-        return results.then(function (data) {
-            resolve(data);
-        });
+         Promise.mapSeries(arr,amazonApi).then(function (data) {
+             console.log('map series', data);
+         resolve(data);
+        }).catch(function (err) {
+             console.log('err', err);
+         });
     });
 
 };
 
 function amazonApi(term) {
     return new Promise(function (resolve) {
+        console.log('search term', term);
         client.itemSearch({
             Keywords: term,
             ResponseGroup: 'ItemIds'
@@ -52,12 +54,6 @@ function amazonApi(term) {
             console.log("\n \n amazon api error: ",JSON.stringify(err));
             resolve('');
         });
-    //     const xray = Xray().delay(3000, 5000).driver(driver);
-    //     xray(amazonUrl, '#result_0@data-asin'
-    // )(function (err,obj) {
-    //         console.log("obj: ",obj);
-    //         resolve(obj);
-    //     });
     });
 }
 

@@ -31,11 +31,15 @@ app.post('/amazon',function(req,res){
     console.log(req.body);
     search(req.body).then(function (result) {
         console.log("\n \n amazon ASIN's: ",result);
-        products(result).then(function (prodList) {
-            console.log("\n \n amazon Prodducts result: ",prodList);
-            res.status(200).send(prodList) ;
-        })
+            res.status(200).send(result) ;
+    });
+});
 
+app.post('/products',function(req,res){
+    console.log(req.body);
+    products(req.body).then(function (result) {
+        console.log("\n \n amazon products: ",result);
+        res.status(200).send(result) ;
     });
 });
 
