@@ -1,12 +1,13 @@
 var Xray = require('x-ray');
 var request = require('request');
 var amazon = require('amazon-product-api');
+var keys = require('./keys');
 
 var Promise = require("bluebird");
 
 var client = amazon.createClient({
-    awsId: "AKIAJG3D5XAHMMG3KYMQ",
-    awsSecret: "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",
+    awsId: keys.awsId,
+    awsSecret: keys.awsSecret,
     awsTag: "aws Tag"
 });
 
