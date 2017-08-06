@@ -27,6 +27,20 @@ export class SearchService {
       .catch((e:Response | any)=> { return this.http.handleError(e)});
   }
 
+  scrapeToys(url):Observable<any>{
+    let payload = {
+      url: url
+    }
+    console.log(payload)
+    return this.http.post(this.severUrl +'/toysrus/',payload)
+      .map((res:Response)=>{
+        console.log("res toys r us: ",res.json());
+        return res.json()
+
+      })
+      .catch((e:Response | any)=> { return this.http.handleError(e)});
+  }
+
   srearchAmzonAsin(data){
     let titles = [];
     for (let i=0; i<data.length; i++){

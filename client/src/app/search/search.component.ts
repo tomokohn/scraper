@@ -17,17 +17,25 @@ export class SearchComponent implements OnInit {
 
   ngOnInit() {
     this.urlForm = new FormGroup({
-      url: new FormControl('', Validators.required)
+      url: new FormControl('', Validators.required),
+      store: new FormControl('', Validators.required)
     })
   }
 
 
   onSubmit(){
     this.beginSearch.emit();
-    this.searchService.scrapeWalmart(this.urlForm.value.url).subscribe(res=>{
-      this.dataAnswer = res;
-      this.searchResult.emit(this.dataAnswer);
-    })
+    if (this.urlForm.value.store === 'walmart'){
+      this.searchService.scrapeWalmart(this.urlForm.value.url).subscribe(res=>{
+        this.dataAnswer = res;
+        this.searchResult.emit(this.dataAnswer);
+      })
+    } else {
+      this.searchService.scrapeToys(this.urlForm.value.url).subscribe(res=>{
+        this.dataAnswer = res;
+        this.searchResult.emit(this.dataAnswer);
+      })
+    }
   }
 
 }
