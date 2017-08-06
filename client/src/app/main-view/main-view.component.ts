@@ -13,6 +13,8 @@ export class MainViewComponent implements OnInit {
 
   scraperData;
   showTable:boolean = false;
+  showGotAsins:boolean = false;
+  showLoader:boolean = false;
 
   ngOnInit() {
   }
@@ -20,27 +22,32 @@ export class MainViewComponent implements OnInit {
   getAmazonAsins(event) {
     this.scraperData = event;
     this.searchService.srearchAmzonAsin(event).subscribe(res=>{
+      this.showGotAsins = true;
       this.searchService.srearchAmzonProducts(res).subscribe(response=>{
         this.margeLists(this.scraperData,response);
         this.showTable = true;
+        this.showLoader = true;
       })
     })
   }
 
   margeLists(oldData,newData){
     for(let i=0;i<oldData.length;i++){
+      let tempData = newData[i][0];
       if (newData[i] != ""){
-        oldData[i]['asin'] = newData[i][0].ASIN[0];
-        oldData[i]['priceAmazon'] = newData[i][0].OfferSummary[0].LowestNewPrice[0].FormattedPrice[0];
+        oldData[i]['asin'] = tempData.ASIN[0];
+        oldData[i]['priceAmazon'] = tempData.OfferSummary[0].LowestNewPrice[0].FormattedPrice[0];
         oldData[i]['isGood'] = this.parseAndCompare(oldData[i].price,oldData[i].priceAmazon);
-        oldData[i]['salesRank'] = newData[i][0].SalesRank[0];
-        oldData[i]['amazonTitle'] = newData[i][0].ItemAttributes[0].Title[0];
+        oldData[i]['salesRank'] = tempData.hasOwnProperty('SalesRank') ? tempData.SalesRank[0] : '';
+        oldData[i]['amazonTitle'] = tempData.ItemAttributes[0].Title[0];
+        oldData[i]['amazonImage'] = tempData.hasOwnProperty('MediumImage') ? tempData.MediumImage[0].URL[0] : '';
       } else{
         oldData[i]['asin'] = '';
         oldData[i]['priceAmazon'] = '';
         oldData[i]['isGood'] = '';
         oldData[i]['salesRank'] ='';
         oldData[i]['amazonTitle'] ='';
+        oldData[i]['amazonImage'] ='';
       }
     }
   }
@@ -54,6 +61,12 @@ export class MainViewComponent implements OnInit {
     let num2 = price2.replace("$",'');
     num2 = parseInt(num2);
     return (num1 * 1.5) < num2;
+  }
+
+  resetData(){
+    this.scraperData = [];
+    this.showGotAsins = false;
+    this.showTable = false;
   }
 }
 

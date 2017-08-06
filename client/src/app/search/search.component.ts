@@ -13,6 +13,7 @@ export class SearchComponent implements OnInit {
   urlForm:FormGroup;
   dataAnswer;
   @Output() searchResult = new EventEmitter();
+  @Output() beginSearch = new EventEmitter();
 
   ngOnInit() {
     this.urlForm = new FormGroup({
@@ -22,6 +23,7 @@ export class SearchComponent implements OnInit {
 
 
   onSubmit(){
+    this.beginSearch.emit();
     this.searchService.scrapeWalmart(this.urlForm.value.url).subscribe(res=>{
       this.dataAnswer = res;
       this.searchResult.emit(this.dataAnswer);

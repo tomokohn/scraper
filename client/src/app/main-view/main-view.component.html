@@ -1,17 +1,25 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-6">
-      <app-search (searchResult)="getAmazonAsins($event)"></app-search>
+      <app-search (searchResult)="getAmazonAsins($event)"
+                  (beginSearch)="showLoader = true"></app-search>
     </div>
   </div>
-  <div class="row" *ngIf="showTable">
-    <div class="col-md-12">
+  <div class="row">
+    <div class="col-md-4">
+      <button class="btn btn-primary" (click)="resetData()">reset data table</button>
+    </div>
+    <div class="col-md-4">
+      <div class="alert alert-info" *ngIf="showGotAsins">
+        <strong>Info!</strong> I got the Asin's, working on product data
+      </div>
+    </div>
+    <div class="col-md-12" *ngIf="showTable">
       <div class="title">merged lists</div>
       <p-dataTable [value]="scraperData" *ngIf="scraperData" >
         <p-column field="isGood" header="is good deal" [sortable]="true"></p-column>
         <p-column field="title" header="title walmat"></p-column>
         <p-column field="title" header="title amazon"></p-column>
-        <p-column field="asin" header="ASIN amazon"></p-column>
         <p-column field="price" header="price walmat"></p-column>
         <p-column field="priceAmazon" header="price amazon"></p-column>
         <p-column field="salesRank" header="sales rank"></p-column>
@@ -26,6 +34,11 @@
           </ng-template>
         </p-column>
         <p-column field="image" header="image walmart">
+        <ng-template let-col let-img="rowData" pTemplate="body">
+          <img src="{{img[col.field]}}">
+        </ng-template>
+      </p-column>
+        <p-column field="amazonImage" header="image amazon">
           <ng-template let-col let-img="rowData" pTemplate="body">
             <img src="{{img[col.field]}}">
           </ng-template>
@@ -33,5 +46,5 @@
       </p-dataTable>
     </div>
   </div>
-  <app-loader *ngIf="!showTable"></app-loader>
+  <app-loader *ngIf="showLoader"></app-loader>
 </div>
